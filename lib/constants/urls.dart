@@ -1,5 +1,4 @@
 library constants;
 
-import 'package:flutter/material.dart';
 
-const String APIBaseURL = "http://localhost/api";
+const String APIBaseURL = "https://d3966c31c8d2.ngrok.io/api";

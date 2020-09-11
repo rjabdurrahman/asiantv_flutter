@@ -1,10 +1,9 @@
 import 'package:http/http.dart' as http;
 import '../models/model-live.dart';
-import '../constants/urls.dart' as Constants;
+import '../constants/urls.dart' as URLConstants;
 
 class ServiceLive {
-  static const String url =
-      "https://7974bf84c787.ngrok.io/api/free/live/live.php";
+  static const String url = URLConstants.APIBaseURL  + "/free/live/live.php";
 
   static Future<List<ModelLive>> getLiveUrl() async {
     try {

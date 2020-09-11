@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:flutter/services.dart';
 
 class LiveTVFullScreen extends StatefulWidget {
   final String LiveVideoUrl;
@@ -13,16 +14,19 @@ class LiveTVFullScreen extends StatefulWidget {
 class _LiveTVFullScreenState extends State<LiveTVFullScreen> {
   YoutubePlayerController _controller;
 
+
   void initState() {
     // TODO: implement initState
     super.initState();
+    SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft]);
     _controller = YoutubePlayerController(
       initialVideoId: YoutubePlayer.convertUrlToId(widget.LiveVideoUrl),
       flags: const YoutubePlayerFlags(
         mute: false,
         autoPlay: true,
         disableDragSeek: false,
-        hideControls: false,
+        hideControls: true,
+        hideThumbnail: true,
         loop: false,
         isLive: true,
         forceHD: false,

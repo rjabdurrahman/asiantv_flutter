@@ -5,7 +5,7 @@ class NoInternetConnection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors.black12,
+        color: Colors.white10,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -26,7 +26,7 @@ class NoInternetConnection extends StatelessWidget {
               SizedBox(
                 height: 10,
               ),
-              Text("No internet Connection. \n Please check your connection!", textAlign: TextAlign.center, style: TextStyle(
+              Text("No internet Connection!", textAlign: TextAlign.center, style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
                 color: Colors.red,
