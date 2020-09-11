@@ -1,7 +1,14 @@
+import 'dart:async';
+import 'dart:io';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:tv_app/helpers/connection.dart';
 import 'package:tv_app/pages/livetv.dart';
+import 'package:tv_app/pages/no-internet.dart';
 import '../widgets/hometoptabs.dart';
 import '../constants/colors.dart' as ColorConstants;
+
+
 
 class HomePage extends StatefulWidget {
   @override
@@ -9,19 +16,74 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool isAppbarActive = true;
+  // Adding internet connectivity functionality
+  Map _source = {ConnectivityResult.none: false};
+  MyConnectivity _connectivity = MyConnectivity.instance;
+
+
+  // Variables
+  bool isOnline = true;
+
 
   @override
+  void initState() {
+    super.initState();
+    _connectivity.initialise();
+    _connectivity.myStream.listen((source) {
+      setState(() => _source = source);
+    });
+  //  Working with stream
+
+  }
+
+  @override
+  void dispose() {
+    _connectivity.disposeStream();
+    super.dispose();
+  }
+
+
+  void CheckConnection() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        setState(() {
+          isOnline =  true;
+        });
+      }
+    } on SocketException catch (_) {
+      setState(() {
+        isOnline = false;
+      });
+    }
+  }
+  @override
   Widget build(BuildContext context) {
+    String string;
+    switch (_source.keys.toList()[0]) {
+      case ConnectivityResult.none:
+        string = "Offline";
+        setState(() {
+          isOnline = false;
+        });
+        break;
+      case ConnectivityResult.mobile:
+        string = "Mobile: Online";
+        CheckConnection();
+        break;
+      case ConnectivityResult.wifi:
+        string = "WiFi: Online";
+        CheckConnection();
+    }
+
     return DefaultTabController(
       length: 5,
-      child: Scaffold(
-        appBar: isAppbarActive
-            ? AppBar(
+      child: isOnline ? Scaffold(
+        appBar:  AppBar(
                 backgroundColor: ColorConstants.DEFAULT_MENU_COLOR,
                 title: Padding(
                   padding: EdgeInsets.all(1.0),
-                  child: TabBar(
+                  child:TabBar(
                     isScrollable: true,
                     indicatorColor: ColorConstants.MAIN_TAB_INDICATOR_COLOR,
                     indicatorWeight: 3.0,
@@ -86,8 +148,7 @@ class _HomePageState extends State<HomePage> {
                       )
                     ],
                   ),
-                ))
-            : null,
+                )) ,
         body: TabBarView(
           children: <Widget>[
             LiveTV(),
@@ -97,7 +158,7 @@ class _HomePageState extends State<HomePage> {
             HomeTopTabs()
           ],
         ),
-      ),
+      ) : NoInternetConnection(),
     );
   }
 }
