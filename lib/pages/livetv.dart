@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tv_app/models/model-videos.dart';
 import 'package:tv_app/services/service-live.dart';
+import 'package:tv_app/widgets/VideoDetails.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:dio/dio.dart';
 import '../services/service-recent-videos.dart';
 
 import 'fullscreenlivetv.dart';
@@ -97,7 +100,7 @@ class _LiveTVState extends State<LiveTV> {
                                 Icon(
                                   Icons.play_arrow,
                                   color: Colors.red,
-                                  size: 160,
+                                  size: 140,
                                 ),
                                 Text("Live TV",
                                     style: TextStyle(
@@ -133,79 +136,81 @@ class _LiveTVState extends State<LiveTV> {
               flex: 1,
               child: _loading
                   ? Text("")
-                  : Column(
-                    children: [
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            RaisedButton(
-                              color: Colors.red,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.play_arrow, color: Colors.white),
-                                  Text(
-                                    "Play",
-                                    style: TextStyle(color: Colors.white),
-                                  )
-                                ],
+                  : FittedBox(
+                    child: Column(
+                      children: [
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              RaisedButton(
+                                color: Colors.red,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.play_arrow, color: Colors.white),
+                                    Text(
+                                      "Play",
+                                      style: TextStyle(color: Colors.white),
+                                    )
+                                  ],
+                                ),
+                                onPressed: () => {_controller.play()},
                               ),
-                              onPressed: () => {_controller.play()},
-                            ),
-                            SizedBox(
-                              width: 1,
-                            ),
-                            RaisedButton(
-                              color: Colors.red,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.stop, color: Colors.white),
-                                  Text(
-                                    "Pause",
-                                    style: TextStyle(color: Colors.white),
-                                  )
-                                ],
+                              SizedBox(
+                                width: 1,
                               ),
-                              onPressed: () => {_controller.pause()},
-                            ),
-                            SizedBox(
-                              width: 1,
-                            ),
-                            RaisedButton(
-                              color: Colors.red,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.fullscreen, color: Colors.white),
-                                  Text(
-                                    "Full Screen",
-                                    style: TextStyle(color: Colors.white),
-                                  )
-                                ],
+                              RaisedButton(
+                                color: Colors.red,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.stop, color: Colors.white),
+                                    Text(
+                                      "Pause",
+                                      style: TextStyle(color: Colors.white),
+                                    )
+                                  ],
+                                ),
+                                onPressed: () => {_controller.pause()},
                               ),
-                              onPressed: () async {
-                                _controller.pause();
-                                var result = await Navigator.of(context)
-                                    .push(MaterialPageRoute(
-                                  builder: (context) => LiveTVFullScreen(
-                                      LiveVideoUrl: LiveVideoURL),
-                                ));
-                                if (result == true) {
-                                  print("Navigation Back event occured!");
-                                  if (MediaQuery.of(context).orientation ==
-                                      Orientation.landscape) {
-                                    SystemChrome.setPreferredOrientations(
-                                        [DeviceOrientation.portraitUp]);
+                              SizedBox(
+                                width: 1,
+                              ),
+                              RaisedButton(
+                                color: Colors.red,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.fullscreen, color: Colors.white),
+                                    Text(
+                                      "Full Screen",
+                                      style: TextStyle(color: Colors.white),
+                                    )
+                                  ],
+                                ),
+                                onPressed: () async {
+                                  _controller.pause();
+                                  var result = await Navigator.of(context)
+                                      .push(MaterialPageRoute(
+                                    builder: (context) => LiveTVFullScreen(
+                                        LiveVideoUrl: LiveVideoURL),
+                                  ));
+                                  if (result == true) {
+                                    print("Navigation Back event occured!");
+                                    if (MediaQuery.of(context).orientation ==
+                                        Orientation.landscape) {
+                                      SystemChrome.setPreferredOrientations(
+                                          [DeviceOrientation.portraitUp]);
+                                    }
+                                    _controller.play();
                                   }
-                                  _controller.play();
-                                }
-                              },
-                            )
-                          ],
-                        ),
+                                },
+                              )
+                            ],
+                          ),
 
-                    ],
+                      ],
+                    ),
                   ),
             ),
             SizedBox(
@@ -227,14 +232,23 @@ class _LiveTVState extends State<LiveTV> {
                         mainAxisSpacing: 10.0,
                         childAspectRatio: 2.5
                     ),
-                    itemBuilder: (context, index) => Container(
-                      color: Colors.grey,
-                      child: Center(
-                          child: Text(
-                            "Loading Recent Video",
-                            style: TextStyle(fontSize: 24.0, color: Colors.white),
-                          )),
-                    )),
+                    itemBuilder: (context, index) => Material(
+                    //  Starting creating widget for recent videos
+                      color: Colors.white,
+                      elevation: 14.0,
+                      borderRadius: BorderRadius.circular(24.0),
+                      shadowColor: Color(0x802196F3),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                            Container(
+                              child: Text("Loading.."),
+                            )
+                        ],
+                      ),
+                    )
+
+                ),
                   baseColor: Colors.grey,
                   highlightColor: Colors.redAccent
               )
@@ -250,15 +264,76 @@ class _LiveTVState extends State<LiveTV> {
                     mainAxisSpacing: 5.0,
                     childAspectRatio: 2.5
                   ),
-                  itemBuilder: (context, index) => ListTile(
-                    leading: Image.network(recentVideos[index].thumbnail),
-                    title: Text(recentVideos[index].title),
-                    // trailing: Text(recentVideos[index].createdAt.toIso8601String())
-                  )),
+                  itemBuilder: (context, index) => FittedBox(
+                    child: Material(
+                      color: Colors.white,
+                      elevation: 14.0,
+                      borderRadius: BorderRadius.circular(24.0),
+                      shadowColor: Color(0x802196F3),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            width: 170,
+                            height: 125,
+                            child: ClipRRect(
+                              borderRadius: new BorderRadius.circular(24.0),
+                              child: Image(
+                                fit: BoxFit.fill,
+                                alignment: Alignment.topLeft,
+                                image: NetworkImage(
+                                    recentVideos[index].thumbnail),
+                              ),
+                            ),),
+                          VideoDetails(recentVideos[index].title, recentVideos[index].createdAt.toIso8601String(), recentVideos[index].likes, recentVideos[index].length)
+
+                        ],
+                      ),
+                    ),
+                  )
+
+              ),
             )
           ],
         ),
       ),
     );
   }
+}
+
+
+
+Widget myDetailsContainer() {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    children: <Widget>[
+      Padding(
+        padding: const EdgeInsets.only(left: 8.0),
+        child: Container(child: Text("Chocolate Haven",
+          style: TextStyle(color: Color(0xffe6020a), fontSize: 24.0,fontWeight: FontWeight.bold),)),
+      ),
+      Padding(
+        padding: const EdgeInsets.only(left: 8.0),
+        child: Container(child: Row(children: <Widget>[
+          Container(child: Text("4.3",
+            style: TextStyle(color: Colors.black54, fontSize: 18.0,),)),
+          Container(child: Icon(
+            FontAwesomeIcons.solidStar, color: Colors.amber, size: 15.0,),),
+          Container(child: Icon(
+            FontAwesomeIcons.solidStar, color: Colors.amber, size: 15.0,),),
+          Container(child: Icon(
+            FontAwesomeIcons.solidStar, color: Colors.amber, size: 15.0,),),
+          Container(child: Icon(
+            FontAwesomeIcons.solidStar, color: Colors.amber, size: 15.0,),),
+          Container(child: Icon(
+            FontAwesomeIcons.solidStarHalf, color: Colors.amber,
+            size: 15.0,),),
+          Container(child: Text("(75) \u00B7 1.2 mi",
+            style: TextStyle(color: Colors.black54, fontSize: 18.0,),)),
+        ],)),
+      ),
+      Container(child: Text("Pastries \u00B7 Phoenix,AZ",
+        style: TextStyle(color: Colors.black54, fontSize: 18.0,),)),
+    ],
+  );
 }

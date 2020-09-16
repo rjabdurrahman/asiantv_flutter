@@ -12,7 +12,10 @@ class ModelVideos {
     this.categoriesId,
     this.thumbnail,
     this.link,
+    this.length,
+    this.likes,
     this.createdAt,
+
   });
 
   String id;
@@ -20,7 +23,10 @@ class ModelVideos {
   String categoriesId;
   String thumbnail;
   String link;
+  String length;
+  String likes;
   DateTime createdAt;
+
 
   factory ModelVideos.fromJson(Map<String, dynamic> json) => ModelVideos(
     id: json["id"],
@@ -28,6 +34,8 @@ class ModelVideos {
     categoriesId: json["categories_id"],
     thumbnail: json["thumbnail"],
     link: json["link"],
+    length: json["length"],
+    likes: json["likes"],
     createdAt: DateTime.parse(json["createdAt"]),
   );
 
@@ -37,6 +45,8 @@ class ModelVideos {
     "categories_id": categoriesId,
     "thumbnail": thumbnail,
     "link": link,
+    "length": length.toString(),
+    "likes": likes.toString(),
     "createdAt": createdAt.toIso8601String(),
   };
 }
