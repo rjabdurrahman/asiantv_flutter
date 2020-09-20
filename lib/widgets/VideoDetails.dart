@@ -1,10 +1,7 @@
-
 import 'package:timeago/timeago.dart' as timeago;
-
 import 'package:flutter/material.dart';
 
 class VideoDetails extends StatefulWidget {
-
   VideoDetails(this.title, this.publishedAt, this.likes, this.length);
   String title;
   String length;
@@ -16,17 +13,17 @@ class VideoDetails extends StatefulWidget {
 }
 
 class _VideoDetailsState extends State<VideoDetails> {
-
   String hourLength;
   var parsedDate;
 
   // Converting hour to min. If min is larger or equal to 60
-  mintToHour(){
-    if(double.tryParse(widget.length) >= 60){
-       setState(() {
-         hourLength = (double.tryParse(widget.length) / 60).toStringAsFixed(2) + " hour";
-       });
-    }else{
+  mintToHour() {
+    if (double.tryParse(widget.length) >= 60) {
+      setState(() {
+        hourLength =
+            (double.tryParse(widget.length) / 60).toStringAsFixed(2) + " hour";
+      });
+    } else {
       setState(() {
         hourLength = widget.length + " min";
       });
@@ -51,20 +48,25 @@ class _VideoDetailsState extends State<VideoDetails> {
         Padding(
           padding: const EdgeInsets.only(left: 10.0),
           child: Container(
-              child: Text(
-            widget.title.length > 25 ? widget.title.substring(1, 25) + "..." : widget.title,
-            textAlign: TextAlign.left,
-            style: TextStyle(
-                color: Color(0xffe6020a),
-                fontSize: 14.0,
-                fontWeight: FontWeight.bold),
+              child: Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Text(
+              widget.title.length > 25
+                  ? widget.title.substring(1, 25) + "..."
+                  : widget.title,
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                  color: Color(0xffe6020a),
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.bold),
+            ),
           )),
         ),
         Padding(
           padding: const EdgeInsets.only(left: 10.0, top: 5.0, bottom: 4.0),
           child: Container(
               child: Text(
-                hourLength,
+            hourLength,
             style: TextStyle(
               color: Colors.black54,
               fontSize: 14.0,
@@ -93,7 +95,6 @@ class _VideoDetailsState extends State<VideoDetails> {
             ),
           )),
         ),
-
       ],
     );
   }

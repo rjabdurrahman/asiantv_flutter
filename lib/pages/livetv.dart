@@ -3,6 +3,8 @@ import 'package:shimmer/shimmer.dart';
 import 'package:tv_app/models/model-videos.dart';
 import 'package:tv_app/services/service-live.dart';
 import 'package:tv_app/widgets/VideoDetails.dart';
+import 'package:tv_app/widgets/recent-videos.dart';
+import 'package:tv_app/widgets/video-thumbnail.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -82,8 +84,8 @@ class _LiveTVState extends State<LiveTV> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Flexible(
-              flex: 4,
+            Expanded(
+              flex: 5,
               child: _loading
                   ? Shimmer.fromColors(
                       child: SizedBox(
@@ -100,7 +102,7 @@ class _LiveTVState extends State<LiveTV> {
                                 Icon(
                                   Icons.play_arrow,
                                   color: Colors.red,
-                                  size: 140,
+                                  size: 110,
                                 ),
                                 Text("Live TV",
                                     style: TextStyle(
@@ -124,7 +126,7 @@ class _LiveTVState extends State<LiveTV> {
                         height: 265,
                       ),
                       baseColor: Colors.grey,
-                      highlightColor: Colors.redAccent)
+                      highlightColor: Colors.white)
                   : YoutubePlayer(
                       controller: _controller,
                       onReady: () => {
@@ -132,8 +134,8 @@ class _LiveTVState extends State<LiveTV> {
                       },
                     ),
             ),
-            Flexible(
-              flex: 1,
+            Expanded(
+              flex: 2,
               child: _loading
                   ? Text("")
                   : FittedBox(
@@ -196,7 +198,7 @@ class _LiveTVState extends State<LiveTV> {
                                         LiveVideoUrl: LiveVideoURL),
                                   ));
                                   if (result == true) {
-                                    print("Navigation Back event occured!");
+                                    print("Navigation Back event occurred!");
                                     if (MediaQuery.of(context).orientation ==
                                         Orientation.landscape) {
                                       SystemChrome.setPreferredOrientations(
@@ -208,18 +210,17 @@ class _LiveTVState extends State<LiveTV> {
                               )
                             ],
                           ),
-
+                        SizedBox(
+                          height: 2,
+                        ),
+                        SizedBox(
+                          height: 2,
+                        ),
                       ],
                     ),
                   ),
             ),
-            SizedBox(
-              height: 2,
-            ),
-            SizedBox(
-              height: 2,
-            ),
-            Flexible(
+            Expanded(
               flex: 6,
               child: _loadingRecent?
               Shimmer.fromColors(
@@ -228,9 +229,9 @@ class _LiveTVState extends State<LiveTV> {
                     scrollDirection: Axis.vertical,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 1,
-                        crossAxisSpacing: 10.0,
-                        mainAxisSpacing: 10.0,
-                        childAspectRatio: 2.5
+                        crossAxisSpacing: 5.0,
+                        mainAxisSpacing: 5.0,
+                        childAspectRatio: 2.7
                     ),
                     itemBuilder: (context, index) => Material(
                     //  Starting creating widget for recent videos
@@ -253,46 +254,8 @@ class _LiveTVState extends State<LiveTV> {
                   highlightColor: Colors.redAccent
               )
                   //After Getting data
-                  :
-              GridView.builder(
-                  //This is the builder where we are going to show recent videos
-                  itemCount: recentVideos.length,
-                  scrollDirection: Axis.vertical,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 1,
-                    crossAxisSpacing: 5.0,
-                    mainAxisSpacing: 5.0,
-                    childAspectRatio: 2.5
-                  ),
-                  itemBuilder: (context, index) => FittedBox(
-                    child: Material(
-                      color: Colors.white,
-                      elevation: 14.0,
-                      borderRadius: BorderRadius.circular(24.0),
-                      shadowColor: Color(0x802196F3),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            width: 170,
-                            height: 125,
-                            child: ClipRRect(
-                              borderRadius: new BorderRadius.circular(24.0),
-                              child: Image(
-                                fit: BoxFit.fill,
-                                alignment: Alignment.topLeft,
-                                image: NetworkImage(
-                                    recentVideos[index].thumbnail),
-                              ),
-                            ),),
-                          VideoDetails(recentVideos[index].title, recentVideos[index].createdAt.toIso8601String(), recentVideos[index].likes, recentVideos[index].length)
+                  : RecentVideos(recentVideos)
 
-                        ],
-                      ),
-                    ),
-                  )
-
-              ),
             )
           ],
         ),
@@ -302,7 +265,8 @@ class _LiveTVState extends State<LiveTV> {
 }
 
 
-
+// VideoThumbnailViewer(recentVideos[index].thumbnail, recentVideos[index].link),
+// VideoDetails(recentVideos[index].title, recentVideos[index].createdAt.toIso8601String(), recentVideos[index].likes, recentVideos[index].length)
 Widget myDetailsContainer() {
   return Column(
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
