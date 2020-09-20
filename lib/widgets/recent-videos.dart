@@ -33,29 +33,31 @@ class _RecentVideosState extends State<RecentVideos> {
                   shadowColor: Color(0x802196F3),
                   child:  SizedBox(
                     height: 120,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        Flexible(
-                          fit: FlexFit.tight,
-                          flex: 4,
-                          child: InkWell(
-                            onTap: () async {
-                              var result = await Navigator.of(context)
-                                  .push(MaterialPageRoute(
-                                builder: (context) => VideoPlayer(
-                                    VideoURL: widget.recentVideos[index].link),
-                              ));
-                              if (result == true) {
-                                print("Navigation Back event occurred!");
-                                if (MediaQuery.of(context).orientation ==
-                                    Orientation.landscape) {
-                                  SystemChrome.setPreferredOrientations(
-                                      [DeviceOrientation.portraitUp]);
-                                }
-                              }
-                            },
+                    child: InkWell(
+                      onTap: () async {
+                        {
+                          var result = await Navigator.of(context)
+                              .push(MaterialPageRoute(
+                            builder: (context) => VideoPlayer(
+                                VideoURL: widget.recentVideos[index].link),
+                          ));
+                          if (result == true) {
+                            print("Navigation Back event occurred!");
+                            if (MediaQuery.of(context).orientation ==
+                                Orientation.landscape) {
+                              SystemChrome.setPreferredOrientations(
+                                  [DeviceOrientation.portraitUp]);
+                            }
+                          }
+                        }
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          Flexible(
+                            fit: FlexFit.tight,
+                            flex: 4,
                             child: ClipRRect(
                               borderRadius: new BorderRadius.circular(24.0),
                               child: Container(
@@ -71,18 +73,18 @@ class _RecentVideosState extends State<RecentVideos> {
                               ),
                             ),
                           ),
-                        ),
-                        Flexible(
-                          flex: 6,
-                          fit: FlexFit.loose,
-                          child: Container(
-                            //Here will be details widget
-                            child: VideoDetails(widget.recentVideos[index].title, widget.recentVideos[index].createdAt.toIso8601String(), widget.recentVideos[index].likes, widget.recentVideos[index].length),
+                          Flexible(
+                            flex: 6,
+                            fit: FlexFit.loose,
+                            child: Container(
+                              //Here will be details widget
+                              child: VideoDetails(widget.recentVideos[index].title, widget.recentVideos[index].createdAt.toIso8601String(), widget.recentVideos[index].likes, widget.recentVideos[index].length),
+                            ),
                           ),
-                        ),
-                        //  Image Container
+                          //  Image Container
 
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
