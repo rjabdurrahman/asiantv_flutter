@@ -70,7 +70,7 @@ class _LiveTVState extends State<LiveTV> {
           hideThumbnail: true,
           isLive: true,
           forceHD: false,
-          enableCaption: true,
+          enableCaption: false,
         ),
       );
     });
@@ -254,7 +254,13 @@ class _LiveTVState extends State<LiveTV> {
                   highlightColor: Colors.redAccent
               )
                   //After Getting data
-                  : RecentVideos(recentVideos)
+                  : InkWell(
+                  onTap: (){
+                    // If any click occurs in recent videos playlist stop live playback
+                    _controller.pause();
+                  },
+                  child: RecentVideos(recentVideos),
+              )
 
             )
           ],
