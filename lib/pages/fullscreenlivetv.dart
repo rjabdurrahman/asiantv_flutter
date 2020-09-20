@@ -19,6 +19,8 @@ class _LiveTVFullScreenState extends State<LiveTVFullScreen> {
     // TODO: implement initState
     super.initState();
     SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft]);
+    // Hide Notification bar
+    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
     _controller = YoutubePlayerController(
       initialVideoId: YoutubePlayer.convertUrlToId(widget.LiveVideoUrl),
       flags: const YoutubePlayerFlags(

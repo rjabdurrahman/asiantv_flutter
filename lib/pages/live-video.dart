@@ -18,7 +18,11 @@ class _VideoPlayerState extends State<VideoPlayer> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    // Change screen orientation to Landscape
     SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft]);
+    // Hide Notification bar
+    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+    // Setup youtube player config
     _controller = YoutubePlayerController(
       initialVideoId: YoutubePlayer.convertUrlToId(widget.VideoURL),
       flags: const YoutubePlayerFlags(
