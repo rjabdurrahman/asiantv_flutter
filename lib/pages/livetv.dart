@@ -41,7 +41,7 @@ class _LiveTVState extends State<LiveTV> {
       });
       // Getting recent videos
       ServiceRecentVideos serviceRecentVIDEOS =
-          new ServiceRecentVideos('music', 10);
+          new ServiceRecentVideos('news', 10);
       print(
           "Working on recent videos ---------------------------------------------------");
       serviceRecentVIDEOS.getLiveUrl().then((results) {
@@ -75,6 +75,13 @@ class _LiveTVState extends State<LiveTV> {
       );
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _controller.dispose();
+    super.dispose();
   }
 
   @override

@@ -52,7 +52,7 @@ class _VideoDetailsState extends State<VideoDetails> {
             padding: const EdgeInsets.only(top: 8),
             child: Text(
               widget.title.length > 25
-                  ? widget.title.substring(1, 25) + "..."
+                  ? widget.title.substring(0, 25) + "..."
                   : widget.title,
               textAlign: TextAlign.left,
               style: TextStyle(

@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:tv_app/models/model-videos.dart';
 import 'package:tv_app/pages/live-video.dart';
 import 'package:tv_app/widgets/VideoDetails.dart';
+import 'package:tv_app/widgets/message-box.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class RecentVideos extends StatefulWidget {
@@ -20,7 +21,7 @@ class _RecentVideosState extends State<RecentVideos> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(
+      body: widget.recentVideos.length < 1 ? MessageBox(Icons.info_outline, Colors.grey, "No Recent Videos Availabe") :ListView.builder(
           itemCount: widget.recentVideos.length,
           itemBuilder: (BuildContext context, int index){
             return Padding(
@@ -57,12 +58,12 @@ class _RecentVideosState extends State<RecentVideos> {
                         children: <Widget>[
                           Flexible(
                             fit: FlexFit.tight,
-                            flex: 4,
+                            flex: 5,
                             child: ClipRRect(
                               borderRadius: new BorderRadius.circular(24.0),
                               child: Container(
-                                width: 150,
-                                height: 120,
+                                width: 180,
+                                height: 130,
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
