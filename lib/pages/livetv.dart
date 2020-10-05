@@ -12,10 +12,7 @@ import 'package:dio/dio.dart';
 import '../services/service-recent-videos.dart';
 import 'package:better_player/better_player.dart';
 
-import 'fullscreenlivetv.dart';
-
 class LiveTV extends StatefulWidget {
-  // Live Stream link = https://www.youtube.com/watch?v=uipWBdYp2gY
 
   @override
   _LiveTVState createState() => _LiveTVState();
@@ -27,28 +24,31 @@ class _LiveTVState extends State<LiveTV> {
   String LiveVideoURL;
   List<ModelVideos> recentVideos;
 
+
   bool _loading;
   bool _loadingRecent = true;
   @override
   void initState() {
     _loading = true;
+
     //Batter player controller
-    BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
-        BetterPlayerDataSourceType.NETWORK,
-        "http://45.249.187.238:8081/hls/new4.m3u8");
-    _betterPlayerController = BetterPlayerController(
-        BetterPlayerConfiguration(
-          autoPlay: true,
-          looping: true,
-          allowedScreenSleep: false,
-          fullScreenByDefault: false,
-        ),
-        betterPlayerDataSource: betterPlayerDataSource);
+
     // Getting data from the server
     ServiceLive.getLiveUrl().then((url) {
       // _liveurl = url;
       // LiveVideoURL = url[0].url;
       LiveVideoURL = url[0].url;
+      // Live Video Player Configuration
+      BetterPlayerDataSource betterPlayerDataSource = BetterPlayerDataSource(
+          BetterPlayerDataSourceType.NETWORK,LiveVideoURL);
+      _betterPlayerController = BetterPlayerController(
+          BetterPlayerConfiguration(
+            autoPlay: true,
+            looping: true,
+            allowedScreenSleep: false,
+            fullScreenByDefault: false,
+          ),
+          betterPlayerDataSource: betterPlayerDataSource);
 
       // print( "Url from the cloud Json -----------------------------------: " + url[0].url);
       setState(() {
@@ -72,22 +72,6 @@ class _LiveTVState extends State<LiveTV> {
                 results[0].title);
       });
 
-      // Player Related Configuration
-      // Configuring youtube player
-      _controller = YoutubePlayerController(
-        initialVideoId: YoutubePlayer.convertUrlToId(LiveVideoURL),
-        flags: const YoutubePlayerFlags(
-          mute: false,
-          autoPlay: true,
-          disableDragSeek: false,
-          hideControls: true,
-          loop: true,
-          hideThumbnail: true,
-          isLive: true,
-          forceHD: false,
-          enableCaption: false,
-        ),
-      );
     });
     super.initState();
   }
@@ -154,92 +138,9 @@ class _LiveTVState extends State<LiveTV> {
                       controller: _betterPlayerController,
                     ),
             ),
-            // Expanded(
-            //   flex: 2,
-            //   child: _loading
-            //       ? Text("")
-            //       : FittedBox(
-            //           child: Column(
-            //             children: [
-            //               Row(
-            //                 mainAxisAlignment: MainAxisAlignment.center,
-            //                 children: [
-            //                   RaisedButton(
-            //                     color: Colors.red,
-            //                     child: Row(
-            //                       mainAxisAlignment: MainAxisAlignment.center,
-            //                       children: [
-            //                         Icon(Icons.play_arrow, color: Colors.white),
-            //                         Text(
-            //                           "Play",
-            //                           style: TextStyle(color: Colors.white),
-            //                         )
-            //                       ],
-            //                     ),
-            //                     onPressed: () => {_controller.play()},
-            //                   ),
-            //                   SizedBox(
-            //                     width: 1,
-            //                   ),
-            //                   RaisedButton(
-            //                     color: Colors.red,
-            //                     child: Row(
-            //                       mainAxisAlignment: MainAxisAlignment.center,
-            //                       children: [
-            //                         Icon(Icons.stop, color: Colors.white),
-            //                         Text(
-            //                           "Pause",
-            //                           style: TextStyle(color: Colors.white),
-            //                         )
-            //                       ],
-            //                     ),
-            //                     onPressed: () => {_controller.pause()},
-            //                   ),
-            //                   SizedBox(
-            //                     width: 1,
-            //                   ),
-            //                   RaisedButton(
-            //                     color: Colors.red,
-            //                     child: Row(
-            //                       mainAxisAlignment: MainAxisAlignment.center,
-            //                       children: [
-            //                         Icon(Icons.fullscreen, color: Colors.white),
-            //                         Text(
-            //                           "Full Screen",
-            //                           style: TextStyle(color: Colors.white),
-            //                         )
-            //                       ],
-            //                     ),
-            //                     onPressed: () async {
-            //                       _controller.pause();
-            //                       var result = await Navigator.of(context)
-            //                           .push(MaterialPageRoute(
-            //                         builder: (context) => LiveTVFullScreen(
-            //                             LiveVideoUrl: LiveVideoURL),
-            //                       ));
-            //                       if (result == true) {
-            //                         print("Navigation Back event occurred!");
-            //                         if (MediaQuery.of(context).orientation ==
-            //                             Orientation.landscape) {
-            //                           SystemChrome.setPreferredOrientations(
-            //                               [DeviceOrientation.portraitUp]);
-            //                         }
-            //                         _controller.play();
-            //                       }
-            //                     },
-            //                   )
-            //                 ],
-            //               ),
-            //               SizedBox(
-            //                 height: 2,
-            //               ),
-            //               SizedBox(
-            //                 height: 2,
-            //               ),
-            //             ],
-            //           ),
-            //         ),
-            // ),
+            SizedBox(
+              height: 15,
+            ),
             Expanded(
                 flex: 6,
                 child: _loadingRecent
@@ -286,90 +187,3 @@ class _LiveTVState extends State<LiveTV> {
   }
 }
 
-// VideoThumbnailViewer(recentVideos[index].thumbnail, recentVideos[index].link),
-// VideoDetails(recentVideos[index].title, recentVideos[index].createdAt.toIso8601String(), recentVideos[index].likes, recentVideos[index].length)
-Widget myDetailsContainer() {
-  return Column(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    children: <Widget>[
-      Padding(
-        padding: const EdgeInsets.only(left: 8.0),
-        child: Container(
-            child: Text(
-          "Chocolate Haven",
-          style: TextStyle(
-              color: Color(0xffe6020a),
-              fontSize: 24.0,
-              fontWeight: FontWeight.bold),
-        )),
-      ),
-      Padding(
-        padding: const EdgeInsets.only(left: 8.0),
-        child: Container(
-            child: Row(
-          children: <Widget>[
-            Container(
-                child: Text(
-              "4.3",
-              style: TextStyle(
-                color: Colors.black54,
-                fontSize: 18.0,
-              ),
-            )),
-            Container(
-              child: Icon(
-                FontAwesomeIcons.solidStar,
-                color: Colors.amber,
-                size: 15.0,
-              ),
-            ),
-            Container(
-              child: Icon(
-                FontAwesomeIcons.solidStar,
-                color: Colors.amber,
-                size: 15.0,
-              ),
-            ),
-            Container(
-              child: Icon(
-                FontAwesomeIcons.solidStar,
-                color: Colors.amber,
-                size: 15.0,
-              ),
-            ),
-            Container(
-              child: Icon(
-                FontAwesomeIcons.solidStar,
-                color: Colors.amber,
-                size: 15.0,
-              ),
-            ),
-            Container(
-              child: Icon(
-                FontAwesomeIcons.solidStarHalf,
-                color: Colors.amber,
-                size: 15.0,
-              ),
-            ),
-            Container(
-                child: Text(
-              "(75) \u00B7 1.2 mi",
-              style: TextStyle(
-                color: Colors.black54,
-                fontSize: 18.0,
-              ),
-            )),
-          ],
-        )),
-      ),
-      Container(
-          child: Text(
-        "Pastries \u00B7 Phoenix,AZ",
-        style: TextStyle(
-          color: Colors.black54,
-          fontSize: 18.0,
-        ),
-      )),
-    ],
-  );
-}
