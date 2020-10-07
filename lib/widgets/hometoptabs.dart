@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tv_app/pages/category-video-list.dart';
 import '../constants/colors.dart' as ColorConstants;
 
 class HomeTopTabs extends StatefulWidget {
@@ -107,15 +108,15 @@ class _HomeTopTabsState extends State<HomeTopTabs>
           children: [
             Container(
               height: 200.0,
-              child: Center(child: Text('Natok Choice')),
+              child: CategoryVideoList(categoryName: 'natok'),
             ),
             Container(
               height: 200.0,
-              child: Center(child: Text('Movie Choice')),
+              child: Center(child: CategoryVideoList(categoryName: 'natok')),
             ),
             Container(
               height: 200.0,
-              child: Center(child: Text('Music Choice')),
+              child: Center(child: CategoryVideoList(categoryName: 'natok')),
             ),
             Container(
               height: 200.0,
