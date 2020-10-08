@@ -16,7 +16,7 @@ class _HomeTopTabsState extends State<HomeTopTabs>
   @override
   void initState() {
     super.initState();
-    _tabController = new TabController(length: 6, vsync: this);
+    _tabController = new TabController(length: 5, vsync: this);
     _tabController.addListener(_handleTabSelection);
     widget.colorVal = ColorConstants.PRIMARY_COLOR;
   }
@@ -31,7 +31,7 @@ class _HomeTopTabsState extends State<HomeTopTabs>
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 6,
+      length: 5,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: ColorConstants.DEFAULT_WHITE_COLOR,
@@ -90,15 +90,6 @@ class _HomeTopTabsState extends State<HomeTopTabs>
                             : Colors.black),
                   ),
                 ),
-                Tab(
-                  child: Text(
-                    "News",
-                    style: TextStyle(
-                        color: _tabController.index == 5
-                            ? widget.colorVal
-                            : Colors.black),
-                  ),
-                ),
               ],
             ),
           ),
@@ -112,23 +103,19 @@ class _HomeTopTabsState extends State<HomeTopTabs>
             ),
             Container(
               height: 200.0,
-              child: Center(child: CategoryVideoList(categoryName: 'natok')),
+              child: CategoryVideoList(categoryName: 'movie'),
             ),
             Container(
               height: 200.0,
-              child: Center(child: CategoryVideoList(categoryName: 'natok')),
+              child: CategoryVideoList(categoryName: 'music'),
             ),
             Container(
               height: 200.0,
-              child: Center(child: Text('Editor Choice')),
+              child: CategoryVideoList(categoryName: 'talkshow'),
             ),
             Container(
               height: 200.0,
-              child: Center(child: Text('Editor Choice')),
-            ),
-            Container(
-              height: 200.0,
-              child: Center(child: Text('Editor Choice')),
+              child: CategoryVideoList(categoryName: 'news'),
             ),
           ],
         ),
